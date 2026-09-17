@@ -1,5 +1,6 @@
-package edu.final_year.backendwebm.auth;
+package edu.final_year.backendwebm.auth.jwt;
 
+import edu.final_year.backendwebm.auth.token.RevokedTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

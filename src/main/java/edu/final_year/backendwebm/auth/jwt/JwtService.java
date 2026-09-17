@@ -1,4 +1,4 @@
-package edu.final_year.backendwebm.auth;
+package edu.final_year.backendwebm.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

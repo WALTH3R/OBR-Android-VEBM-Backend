@@ -1,6 +1,6 @@
 package edu.final_year.backendwebm.config;
 
-import edu.final_year.backendwebm.auth.JwtAuthenticationFilter;
+import edu.final_year.backendwebm.auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

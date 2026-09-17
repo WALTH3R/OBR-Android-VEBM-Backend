@@ -1,4 +1,4 @@
-package edu.final_year.backendwebm.auth;
+package edu.final_year.backendwebm.auth.token;
 
 import edu.final_year.backendwebm.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

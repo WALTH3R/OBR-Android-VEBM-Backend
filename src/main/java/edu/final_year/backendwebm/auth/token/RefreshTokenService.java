@@ -1,4 +1,4 @@
-package edu.final_year.backendwebm.auth;
+package edu.final_year.backendwebm.auth.token;
 
 import edu.final_year.backendwebm.exception.InvalidRefreshTokenException;
 import edu.final_year.backendwebm.user.User;

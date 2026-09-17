@@ -1,4 +1,4 @@
-package edu.final_year.backendwebm.auth;
+package edu.final_year.backendwebm.auth.token;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
