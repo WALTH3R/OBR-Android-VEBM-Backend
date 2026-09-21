@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### OBR spec (proprietary, not to be published) ###
-OBR details/*.pdf
+OBR details/
