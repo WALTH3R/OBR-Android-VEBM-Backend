@@ -18,3 +18,8 @@ app:
     secret: ${JWT_SECRET:change-this-super-secret-jwt-signing-key-dev-only}
     expiration-minutes: ${JWT_EXPIRATION_MINUTES:60}
     refresh-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:30}
+  obr:
+    base-url: ${OBR_BASE_URL:https://ebms.obr.gov.bi:9443/ebms_api}
+    username: ${OBR_USERNAME:}
+    password: ${OBR_PASSWORD:}
+    timeout-seconds: ${OBR_TIMEOUT_SECONDS:10}

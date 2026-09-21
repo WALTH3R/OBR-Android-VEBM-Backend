@@ -35,6 +35,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of("Invalid email or password"));
     }
 
+    @ExceptionHandler(NifAlreadyRegisteredException.class)
+    public ResponseEntity<ErrorResponse> handleNifAlreadyRegistered(NifAlreadyRegisteredException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidNifException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidNif(InvalidNifException ex) {
+        return ResponseEntity.badRequest().body(ErrorResponse.of(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ObrUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleObrUnavailable(ObrUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(ErrorResponse.of(ex.getMessage()));
+    }
+
     @ExceptionHandler(InvalidRefreshTokenException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRefreshToken(InvalidRefreshTokenException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of(ex.getMessage()));
