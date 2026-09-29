@@ -1,6 +1,8 @@
 package edu.final_year.backendwebm.store.dto;
 
+import edu.final_year.backendwebm.store.Currency;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CreateStoreRequest(
@@ -18,6 +20,9 @@ public record CreateStoreRequest(
         String town,
 
         @Size(max = 30, message = "Phone number must be at most 30 characters")
-        String phone
+        String phone,
+
+        @NotNull(message = "Currency is required")
+        Currency currency
 ) {
 }

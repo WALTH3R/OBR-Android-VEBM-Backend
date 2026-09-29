@@ -1,6 +1,7 @@
 package edu.final_year.backendwebm.store;
 
 import edu.final_year.backendwebm.exception.NifAlreadyRegisteredException;
+import edu.final_year.backendwebm.exception.StoreNotFoundException;
 import edu.final_year.backendwebm.obr.ObrClient;
 import edu.final_year.backendwebm.store.dto.CreateStoreRequest;
 import edu.final_year.backendwebm.store.dto.StoreResponse;
@@ -37,6 +38,7 @@ public class StoreService {
         store.setFiscalName(fiscalName);
         store.setTown(request.town().trim());
         store.setPhone(request.phone() == null || request.phone().isBlank() ? null : request.phone().trim());
+        store.setCurrency(request.currency());
         store.setUser(user);
 
         try {
@@ -44,5 +46,17 @@ public class StoreService {
         } catch (DataIntegrityViolationException e) {
             throw NifAlreadyRegisteredException.forOwner(false);
         }
+    }
+
+    /**
+     * Resolves a store the caller must own. Not owned and not found are both reported as
+     * {@link StoreNotFoundException} so a caller can't tell the two apart.
+     */
+    public Store findOwnedStore(Long storeId, String userEmail) {
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        if (!store.getUser().getEmail().equals(userEmail)) {
+            throw new StoreNotFoundException();
+        }
+        return store;
     }
 }
