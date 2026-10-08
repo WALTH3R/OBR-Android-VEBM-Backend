@@ -1,0 +1,3 @@
+app:
+  obr:
+    base-url: ${OBR_BASE_URL:https://ebms.obr.gov.bi:9443/ebms_api}

@@ -16,6 +16,8 @@ The app requires a running Postgres instance to start (Spring context eagerly co
 
 JWT signing is configured the same way: `JWT_SECRET` (defaults to a dev-only placeholder — **must** be overridden outside local dev), `JWT_EXPIRATION_MINUTES` (default `60`, access token lifetime), and `JWT_REFRESH_EXPIRATION_DAYS` (default `30`, refresh token lifetime).
 
+The OBR base URL (`app.obr.base-url`) is set per Spring profile rather than directly in `application.yaml`: `application-mock.yaml` (local mock server, default `http://localhost:9443`), `application-dev.yaml` (OBR's test server, default `https://ebms.obr.gov.bi:9443/ebms_api`), `application-prod.yaml` (no default — `OBR_BASE_URL` must be set). Active profile is `SPRING_PROFILES_ACTIVE` (default `dev`); each profile's default can still be overridden with `OBR_BASE_URL`.
+
 ## Architecture
 
 Spring Boot 4.1.1 / Java 21 REST API, package root `edu.final_year.backendwebm`.

@@ -1,6 +1,8 @@
 spring:
   application:
     name: backend-webm-java
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_NAME:backend_webm}
     username: ${DB_USERNAME:postgres}
@@ -19,7 +21,6 @@ app:
     expiration-minutes: ${JWT_EXPIRATION_MINUTES:60}
     refresh-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:30}
   obr:
-    base-url: ${OBR_BASE_URL:https://ebms.obr.gov.bi:9443/ebms_api}
-    username: ${OBR_USERNAME:}
-    password: ${OBR_PASSWORD:}
+    username: ${OBR_USERNAME:ws400090756001433}
+    password: ${OBR_PASSWORD:T1)m66g}
     timeout-seconds: ${OBR_TIMEOUT_SECONDS:10}
