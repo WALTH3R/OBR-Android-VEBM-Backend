@@ -3,8 +3,9 @@ package edu.final_year.backendwebm.store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface StoreRepository extends JpaRepository<Store, Long> {
+public interface StoreRepository extends JpaRepository<Store, UUID> {
 
-    Optional<Store> findByNif(String nif);
+    Optional<Store> findByEncryptedNif(String encryptedNif);
 }

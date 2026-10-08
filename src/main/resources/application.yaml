@@ -2,7 +2,7 @@ spring:
   application:
     name: backend-webm-java
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+    active: ${SPRING_PROFILES_ACTIVE:mock}
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_NAME:backend_webm}
     username: ${DB_USERNAME:postgres}
@@ -21,6 +21,10 @@ app:
     expiration-minutes: ${JWT_EXPIRATION_MINUTES:60}
     refresh-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:30}
   obr:
-    username: ${OBR_USERNAME:ws400090756001433}
-    password: ${OBR_PASSWORD:T1)m66g}
+    username: ${OBR_USERNAME}
+    password: ${OBR_PASSWORD}
     timeout-seconds: ${OBR_TIMEOUT_SECONDS:10}
+  vault:
+    uri: ${VAULT_URI:http://localhost:8200}
+    token: ${VAULT_TOKEN:myroot}
+    nif-transit-key: ${VAULT_NIF_TRANSIT_KEY:nif}

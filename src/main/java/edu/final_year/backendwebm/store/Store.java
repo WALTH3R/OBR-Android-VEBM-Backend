@@ -1,5 +1,6 @@
 package edu.final_year.backendwebm.store;
 
+import edu.final_year.backendwebm.province.Commune;
 import edu.final_year.backendwebm.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "stores")
@@ -27,20 +29,22 @@ import java.time.Instant;
 public class Store {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String nif;
+    // Vault transit ciphertext (convergent encryption), never the plaintext NIF.
+    @Column(name = "encrypted_nif", nullable = false, unique = true)
+    private String encryptedNif;
 
     @Column(nullable = false)
     private String fiscalName;
 
-    @Column(nullable = false)
-    private String town;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "commune_id", nullable = false)
+    private Commune commune;
 
     private String phone;
 
