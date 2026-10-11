@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class ProductService {
     private final TvaRepository tvaRepository;
     private final StoreService storeService;
 
-    public ProductResponse create(Long storeId, String userEmail, ProductRequest request) {
+    public ProductResponse create(UUID storeId, String userEmail, ProductRequest request) {
         Store store = storeService.findOwnedStore(storeId, userEmail);
 
         Product product = new Product();
@@ -36,7 +37,7 @@ public class ProductService {
         return ProductResponse.from(productRepository.save(product));
     }
 
-    public List<ProductResponse> list(Long storeId, String userEmail) {
+    public List<ProductResponse> list(UUID storeId, String userEmail) {
         storeService.findOwnedStore(storeId, userEmail);
 
         return productRepository.findAllByStoreId(storeId).stream()
@@ -45,7 +46,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse update(Long storeId, Long productId, String userEmail, ProductRequest request) {
+    public ProductResponse update(UUID storeId, UUID productId, String userEmail, ProductRequest request) {
         storeService.findOwnedStore(storeId, userEmail);
         Product product = productRepository.findByIdAndStoreId(productId, storeId)
                 .orElseThrow(ProductNotFoundException::new);
@@ -56,7 +57,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void delete(Long storeId, Long productId, String userEmail) {
+    public void delete(UUID storeId, UUID productId, String userEmail) {
         storeService.findOwnedStore(storeId, userEmail);
         Product product = productRepository.findByIdAndStoreId(productId, storeId)
                 .orElseThrow(ProductNotFoundException::new);
@@ -64,7 +65,7 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    private void applyRequest(Product product, Long storeId, ProductRequest request) {
+    private void applyRequest(Product product, UUID storeId, ProductRequest request) {
         Category category = categoryRepository.findByIdAndStoreId(request.categoryId(), storeId)
                 .orElseThrow(CategoryNotFoundException::new);
         Tva tva = tvaRepository.findById(request.tvaId())

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/stores/{storeId}/categories")
@@ -24,7 +25,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> create(@PathVariable Long storeId,
+    public ResponseEntity<CategoryResponse> create(@PathVariable UUID storeId,
                                                      @Valid @RequestBody CreateCategoryRequest request,
                                                      Authentication authentication) {
         CategoryResponse response = categoryService.create(storeId, authentication.getName(), request);
@@ -32,7 +33,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryResponse> list(@PathVariable Long storeId, Authentication authentication) {
+    public List<CategoryResponse> list(@PathVariable UUID storeId, Authentication authentication) {
         return categoryService.list(storeId, authentication.getName());
     }
 }

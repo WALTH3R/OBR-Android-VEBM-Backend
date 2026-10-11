@@ -3,10 +3,11 @@ package edu.final_year.backendwebm.product.dto;
 import edu.final_year.backendwebm.product.Product;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
-public record ProductResponse(Long id, String name, Long categoryId, String categoryName,
+public record ProductResponse(UUID id, String name, UUID categoryId, String categoryName,
                                String unitOfMeasurement, BigDecimal costPerUnit, BigDecimal sellPricePerUnit,
-                               Long tvaId, String tvaName) {
+                               UUID tvaId, String tvaName) {
 
     public static ProductResponse from(Product product) {
         return new ProductResponse(

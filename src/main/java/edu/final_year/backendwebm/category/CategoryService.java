@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final StoreService storeService;
 
-    public CategoryResponse create(Long storeId, String userEmail, CreateCategoryRequest request) {
+    public CategoryResponse create(UUID storeId, String userEmail, CreateCategoryRequest request) {
         Store store = storeService.findOwnedStore(storeId, userEmail);
 
         Category category = new Category();
@@ -26,7 +27,7 @@ public class CategoryService {
         return CategoryResponse.from(categoryRepository.save(category));
     }
 
-    public List<CategoryResponse> list(Long storeId, String userEmail) {
+    public List<CategoryResponse> list(UUID storeId, String userEmail) {
         storeService.findOwnedStore(storeId, userEmail);
 
         return categoryRepository.findAllByStoreId(storeId).stream()

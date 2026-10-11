@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record ProductRequest(
 
@@ -14,7 +15,7 @@ public record ProductRequest(
         String name,
 
         @NotNull(message = "Category is required")
-        Long categoryId,
+        UUID categoryId,
 
         @NotBlank(message = "Unit of measurement is required")
         @Size(max = 30, message = "Unit of measurement must be at most 30 characters")
@@ -29,6 +30,6 @@ public record ProductRequest(
         BigDecimal sellPricePerUnit,
 
         @NotNull(message = "TVA rate is required")
-        Long tvaId
+        UUID tvaId
 ) {
 }
