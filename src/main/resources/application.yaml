@@ -9,11 +9,11 @@ spring:
     password: ${DB_PASSWORD:postgres}
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: create
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
 app:
   jwt:
@@ -24,3 +24,5 @@ app:
     username: ${OBR_USERNAME}
     password: ${OBR_PASSWORD}
     timeout-seconds: ${OBR_TIMEOUT_SECONDS:10}
+  security:
+    credentials-encryption-key: ${CREDENTIALS_ENCRYPTION_KEY:vQKq22ysSJnopHSb4ZLOf41DM2/2uRjkHmMaDx6EsuQ=}

@@ -2,6 +2,7 @@ package edu.final_year.backendwebm.obr;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.final_year.backendwebm.exception.InvalidNifException;
+import edu.final_year.backendwebm.exception.InvalidObrCredentialsException;
 import edu.final_year.backendwebm.exception.ObrUnavailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,14 +83,38 @@ public class ObrClient {
         }
     }
 
+    /**
+     * Verifies a store-provided OBR username/password by attempting to log in with them.
+     *
+     * @throws InvalidObrCredentialsException if OBR rejects the credentials
+     * @throws ObrUnavailableException         if OBR cannot be reached or answers unexpectedly
+     */
+    public void validateCredentials(String obrUsername, String obrPassword) {
+        try {
+            LoginResponse response = requestLogin(obrUsername, obrPassword);
+            if (response == null || response.result() == null || response.result().token() == null) {
+                throw new InvalidObrCredentialsException();
+            }
+        } catch (HttpClientErrorException e) {
+            log.info("OBR rejected store credentials: {}", e.getMessage());
+            throw new InvalidObrCredentialsException();
+        } catch (RestClientException e) {
+            log.error("OBR login call failed for store credentials", e);
+            throw new ObrUnavailableException(e);
+        }
+    }
+
     private String login() {
-        LoginResponse response = postJson("/login/", null, new LoginRequest(username, password))
-                .body(LoginResponse.class);
+        LoginResponse response = requestLogin(username, password);
 
         if (response == null || response.result() == null || response.result().token() == null) {
             throw new ObrUnavailableException(new IllegalStateException("OBR login returned no token"));
         }
         return response.result().token();
+    }
+
+    private LoginResponse requestLogin(String username, String password) {
+        return postJson("/login/", null, new LoginRequest(username, password)).body(LoginResponse.class);
     }
 
     // OBR rejects chunked request bodies, so the body is serialized up front to send an explicit Content-Length.

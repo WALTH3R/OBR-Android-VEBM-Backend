@@ -45,6 +45,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(ErrorResponse.of(ex.getMessage()));
     }
 
+    @ExceptionHandler(InvalidObrCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidObrCredentials(InvalidObrCredentialsException ex) {
+        return ResponseEntity.badRequest().body(ErrorResponse.of(ex.getMessage()));
+    }
+
     @ExceptionHandler(ObrUnavailableException.class)
     public ResponseEntity<ErrorResponse> handleObrUnavailable(ObrUnavailableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(ErrorResponse.of(ex.getMessage()));

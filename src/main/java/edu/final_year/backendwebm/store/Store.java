@@ -41,6 +41,13 @@ public class Store {
     @Column(nullable = false)
     private String fiscalName;
 
+    @Column(name = "obr_username", nullable = false)
+    private String obrUsername;
+
+    // AES-GCM ciphertext (AesGcmEncryptionService), never the plaintext OBR password.
+    @Column(name = "encrypted_obr_password", nullable = false)
+    private String encryptedObrPassword;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "commune_id", nullable = false)
     private Commune commune;

@@ -1,5 +1,6 @@
 package edu.final_year.backendwebm.store;
 
+import edu.final_year.backendwebm.crypto.AesGcmEncryptionService;
 import edu.final_year.backendwebm.exception.CommuneNotFoundException;
 import edu.final_year.backendwebm.exception.NifAlreadyRegisteredException;
 import edu.final_year.backendwebm.exception.StoreNotFoundException;
@@ -24,6 +25,7 @@ public class StoreService {
     private final UserRepository userRepository;
     private final CommuneRepository communeRepository;
     private final ObrClient obrClient;
+    private final AesGcmEncryptionService encryptionService;
 
     // Deliberately not @Transactional: no DB transaction should stay open during the remote OBR calls.
     public StoreResponse create(String userEmail, CreateStoreRequest request) {
@@ -31,6 +33,8 @@ public class StoreService {
                 .orElseThrow(() -> new IllegalStateException("Authenticated user not found: " + userEmail));
 
         String nif = request.nif().trim();
+        String obrUsername = request.obrUsername().trim();
+        String obrPassword = request.obrPassword();
 
         storeRepository.findByNif(nif).ifPresent(existing -> {
             throw NifAlreadyRegisteredException.forOwner(existing.getUser().getId().equals(user.getId()));
@@ -40,11 +44,14 @@ public class StoreService {
                 .orElseThrow(CommuneNotFoundException::new);
 
         String fiscalName = obrClient.checkTin(nif);
+        obrClient.validateCredentials(obrUsername, obrPassword);
 
         Store store = new Store();
         store.setName(request.name().trim());
         store.setNif(nif);
         store.setFiscalName(fiscalName);
+        store.setObrUsername(obrUsername);
+        store.setEncryptedObrPassword(encryptionService.encrypt(obrPassword));
         store.setCommune(commune);
         store.setPhone(request.phone() == null || request.phone().isBlank() ? null : request.phone().trim());
         store.setCurrency(request.currency());

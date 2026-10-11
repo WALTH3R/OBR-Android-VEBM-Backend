@@ -6,7 +6,7 @@ import edu.final_year.backendwebm.store.Store;
 import java.time.Instant;
 import java.util.UUID;
 
-public record StoreResponse(UUID id, String name, String nif, String fiscalName, UUID communeId,
+public record StoreResponse(UUID id, String name, String nif, String fiscalName, String obrUsername, UUID communeId,
                             String communeName, UUID provinceId, String provinceName, String phone,
                             Currency currency, Instant createdAt) {
 
@@ -16,6 +16,7 @@ public record StoreResponse(UUID id, String name, String nif, String fiscalName,
                 store.getName(),
                 store.getNif(),
                 store.getFiscalName(),
+                store.getObrUsername(),
                 store.getCommune().getId(),
                 store.getCommune().getName(),
                 store.getCommune().getProvince().getId(),
