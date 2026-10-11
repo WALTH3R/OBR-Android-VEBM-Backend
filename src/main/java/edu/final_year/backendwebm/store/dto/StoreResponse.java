@@ -10,15 +10,11 @@ public record StoreResponse(UUID id, String name, String nif, String fiscalName,
                             String communeName, UUID provinceId, String provinceName, String phone,
                             Currency currency, Instant createdAt) {
 
-    /**
-     * @param nif the plaintext NIF; the caller must decrypt it first, since
-     *            {@link Store#getEncryptedNif()} only ever holds Vault ciphertext.
-     */
-    public static StoreResponse from(Store store, String nif) {
+    public static StoreResponse from(Store store) {
         return new StoreResponse(
                 store.getId(),
                 store.getName(),
-                nif,
+                store.getNif(),
                 store.getFiscalName(),
                 store.getCommune().getId(),
                 store.getCommune().getName(),

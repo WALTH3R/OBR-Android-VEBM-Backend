@@ -24,7 +24,3 @@ app:
     username: ${OBR_USERNAME}
     password: ${OBR_PASSWORD}
     timeout-seconds: ${OBR_TIMEOUT_SECONDS:10}
-  vault:
-    uri: ${VAULT_URI:http://localhost:8200}
-    token: ${VAULT_TOKEN:myroot}
-    nif-transit-key: ${VAULT_NIF_TRANSIT_KEY:nif}

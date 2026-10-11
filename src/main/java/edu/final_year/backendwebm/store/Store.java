@@ -35,9 +35,8 @@ public class Store {
     @Column(nullable = false)
     private String name;
 
-    // Vault transit ciphertext (convergent encryption), never the plaintext NIF.
-    @Column(name = "encrypted_nif", nullable = false, unique = true)
-    private String encryptedNif;
+    @Column(nullable = false, unique = true)
+    private String nif;
 
     @Column(nullable = false)
     private String fiscalName;

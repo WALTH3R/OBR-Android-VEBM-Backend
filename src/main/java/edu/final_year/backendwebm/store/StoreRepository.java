@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface StoreRepository extends JpaRepository<Store, UUID> {
 
-    Optional<Store> findByEncryptedNif(String encryptedNif);
+    Optional<Store> findByNif(String nif);
 }

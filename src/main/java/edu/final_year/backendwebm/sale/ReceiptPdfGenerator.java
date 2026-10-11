@@ -1,7 +1,6 @@
 package edu.final_year.backendwebm.sale;
 
 import edu.final_year.backendwebm.store.Store;
-import edu.final_year.backendwebm.vault.NifEncryptionService;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -26,8 +25,6 @@ public class ReceiptPdfGenerator {
     private static final DateTimeFormatter TIMESTAMP_FORMAT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
 
-    private final NifEncryptionService nifEncryptionService;
-
     public byte[] generate(Sale sale) {
         PDFont regular = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
         PDFont bold = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
@@ -42,7 +39,7 @@ public class ReceiptPdfGenerator {
                 Store store = sale.getStore();
 
                 y = writeLine(content, bold, 16, margin, y, store.getFiscalName());
-                y = writeLine(content, regular, 10, margin, y, "NIF: " + nifEncryptionService.decrypt(store.getEncryptedNif()));
+                y = writeLine(content, regular, 10, margin, y, "NIF: " + store.getNif());
                 y = writeLine(content, regular, 10, margin, y,
                         store.getCommune().getName() + ", " + store.getCommune().getProvince().getName());
                 if (store.getPhone() != null) {

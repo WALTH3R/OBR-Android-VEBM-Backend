@@ -10,7 +10,6 @@ import edu.final_year.backendwebm.store.dto.CreateStoreRequest;
 import edu.final_year.backendwebm.store.dto.StoreResponse;
 import edu.final_year.backendwebm.user.User;
 import edu.final_year.backendwebm.user.UserRepository;
-import edu.final_year.backendwebm.vault.NifEncryptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class StoreService {
     private final UserRepository userRepository;
     private final CommuneRepository communeRepository;
     private final ObrClient obrClient;
-    private final NifEncryptionService nifEncryptionService;
 
     // Deliberately not @Transactional: no DB transaction should stay open during the remote OBR calls.
     public StoreResponse create(String userEmail, CreateStoreRequest request) {
@@ -33,9 +31,8 @@ public class StoreService {
                 .orElseThrow(() -> new IllegalStateException("Authenticated user not found: " + userEmail));
 
         String nif = request.nif().trim();
-        String encryptedNif = nifEncryptionService.encrypt(nif);
 
-        storeRepository.findByEncryptedNif(encryptedNif).ifPresent(existing -> {
+        storeRepository.findByNif(nif).ifPresent(existing -> {
             throw NifAlreadyRegisteredException.forOwner(existing.getUser().getId().equals(user.getId()));
         });
 
@@ -46,7 +43,7 @@ public class StoreService {
 
         Store store = new Store();
         store.setName(request.name().trim());
-        store.setEncryptedNif(encryptedNif);
+        store.setNif(nif);
         store.setFiscalName(fiscalName);
         store.setCommune(commune);
         store.setPhone(request.phone() == null || request.phone().isBlank() ? null : request.phone().trim());
@@ -54,7 +51,7 @@ public class StoreService {
         store.setUser(user);
 
         try {
-            return StoreResponse.from(storeRepository.save(store), nif);
+            return StoreResponse.from(storeRepository.save(store));
         } catch (DataIntegrityViolationException e) {
             throw NifAlreadyRegisteredException.forOwner(false);
         }
