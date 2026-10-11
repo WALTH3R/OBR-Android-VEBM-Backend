@@ -1,5 +1,7 @@
 package edu.final_year.backendwebm.auth;
 
+import edu.final_year.backendwebm.auth.dto.LoginRequest;
+import edu.final_year.backendwebm.auth.dto.LoginResponse;
 import edu.final_year.backendwebm.auth.dto.SignupRequest;
 import edu.final_year.backendwebm.auth.dto.UserResponse;
 import edu.final_year.backendwebm.auth.jwt.JwtService;
@@ -11,6 +13,9 @@ import edu.final_year.backendwebm.user.User;
 import edu.final_year.backendwebm.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +31,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final RevokedTokenRepository revokedTokenRepository;
     private final RefreshTokenService refreshTokenService;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public UserResponse signup(SignupRequest request) {
@@ -39,6 +45,20 @@ public class AuthService {
 
         User saved = userRepository.save(user);
         return UserResponse.from(saved);
+    }
+
+    public LoginResponse login(LoginRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
+
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new IllegalStateException("Authenticated user not found: " + request.email()));
+
+        String accessToken = jwtService.generateToken(authentication.getName());
+        String refreshToken = refreshTokenService.issue(user);
+
+        return LoginResponse.of(accessToken, refreshToken, UserResponse.from(user));
     }
 
     @Transactional
